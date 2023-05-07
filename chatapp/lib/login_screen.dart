@@ -1,4 +1,8 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import './main.dart';
 import 'home_screen.dart';
 // class LoginPage extends StatelessWidget {
@@ -36,7 +40,34 @@ class ScreenState extends State<LoginPage> {
           _isAnimate = true,
         });
     });
+    // _handleGoogleBtnClick();
   }
+
+
+  _handleGoogleBtnClick(){
+    _signInWithGoogle().then((user){
+      // log('User:${user.user}');
+      Navigator.push(context,MaterialPageRoute(builder:(_)=>MyHomePage(title: "FLutter chat app",)));
+    });
+  }
+
+  Future<UserCredential> _signInWithGoogle() async {
+  // Trigger the authentication flow
+  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+  // Obtain the auth details from the request
+  final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+  // Create a new credential
+  final credential = GoogleAuthProvider.credential(
+    accessToken: googleAuth?.accessToken,
+    idToken: googleAuth?.idToken,
+  );
+
+  // Once signed in, return the UserCredential
+  return await FirebaseAuth.instance.signInWithCredential(credential);
+}
+
   // final String title;
   @override
   Widget build(BuildContext context){
@@ -67,8 +98,9 @@ class ScreenState extends State<LoginPage> {
               elevation: 1,
             ),
             onPressed: (){
-              // Navigator.pushReplacement(context,MaterialPageRoute(builder:(context)=>MyHomePage(title: "FLutter chat app",)));
-              Navigator.push(context,MaterialPageRoute(builder:(context)=>MyHomePage(title: "FLutter chat app",)));
+              // _handleGoogleBtnClick();
+              Navigator.pushReplacement(context,MaterialPageRoute(builder:(context)=>MyHomePage(title: "FLutter chat app",)));
+              // Navigator.push(context,MaterialPageRoute(builder:(context)=>MyHomePage(title: "FLutter chat app",)));
             },
             // icon:Image.asset("images/chatIcon.png"),
             label:RichText(text: TextSpan(

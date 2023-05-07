@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+// import 'dart:ui' as ui;
+import 'dart:math' as math;
 
 void main() {
   runApp(const MyApp());
@@ -13,15 +15,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
@@ -38,24 +31,173 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
 
+class MyPainter extends CustomClipper<Path>{
+// class MyPainter extends CustomPainter{
+  @override
+  @override
+  Path getClip(Size size){
+    Path path = Path();
+    path.moveTo(size.width,0);
+    path.lineTo(0,size.height);
+    // path.lineTo(0,0);
+    // path.lineTo(size.width,0);
+    final firstStart1 = Offset(size.width/5,size.height);
+    final firstEnd1 = Offset(size.width/2.25,size.height-50.0);
+    // final firstEnd = Offset(30,size.height-50.0);
+    path.quadraticBezierTo(firstStart1.dy,firstStart1.dx,firstEnd1.dy,firstEnd1.dx);
+
+
+    path.moveTo(size.width,0);
+    path.lineTo(0,size.height);
+    // path.lineTo(0,0);
+    // path.lineTo(size.width,0);
+    // final firstStart = Offset(size.width/5,size.height);
+    // final firstEnd = Offset(size.width/2.25,size.height-50.0);
+    final firstStart = Offset(size.width/10,size.height);
+    final firstEnd = Offset(size.width/5,size.height-50.0);
+    // final firstEnd = Offset(30,size.height-50.0);
+    path.quadraticBezierTo(firstStart.dx,firstStart.dy,firstEnd.dx,firstEnd.dy);
+    // path.quadraticBezierTo(firstEnd.dx,firstEnd.dy,firstStart.dx,firstStart.dy);
+    // path.lineTo(size.width,size.height);
+    // path.quadraticBezierTo(0,size.height,0,0);
+    return path;
+  }
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper)=>true;
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  var imgTapped = 0,i=0;
+
+  Widget popUpOptions(var contWidth){
+    return 
+    Container(
+      // color: Colors.brown,
+      width:contWidth,
+      child:
+    Column(children:[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.add),
+              Text("adfsa"),
+              Spacer(),
+              Icon(Icons.add),
+          ]),
+          // SizedBox(height: 100,),
+            ])
+            );
+  }
+
+  Widget popUp(var contWidth){
+    return 
+    Container(
+      padding: EdgeInsets.only(top:100),
+      child:
+    Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+    Container(
+      decoration: BoxDecoration(
+        color:Colors.yellow,
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(30),topRight: Radius.circular(30)),
+      ),
+      padding: EdgeInsets.only(top:MediaQuery.of(context).size.width<260?260*4/100:MediaQuery.of(context).size.width*4/100,left:MediaQuery.of(context).size.width<260?260*4/100:MediaQuery.of(context).size.width*4/100,right:MediaQuery.of(context).size.width<260?260*4/100:MediaQuery.of(context).size.width*4/100
+      ),
+      height: MediaQuery.of(context).size.height<490?490/2:MediaQuery.of(context).size.height/2,
+      width: MediaQuery.of(context).size.width<260?260:MediaQuery.of(context).size.width,
+      child: 
+      Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          Container(
+            child:SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: 
+            Stack(
+              alignment: Alignment.topCenter,
+
+              children: [
+            SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child:
+                Container(
+                  margin: EdgeInsets.only(top:30),
+                  child: 
+              Column(children: [
+            for(i=0;i<18;i++)...[
+              popUpOptions(contWidth),
+            ],
+              ]),
+              ),
+            ),
+
+            // Stack(
+            //   alignment: Alignment.topLeft,
+            //   // mainAxisAlignment: MainAxisAlignment.start,
+            //   children: [
+            Container(
+              // Visibility(),
+              width:contWidth,
+              height: 30,
+              decoration: BoxDecoration(
+                color:Colors.yellow,
+                border: Border(bottom: BorderSide(width: 2,color:Colors.black))
+              ),
+                  child:
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children:[
+                    Text("Sort by"),
+
+                    // Divider(thickness: 2,color: Colors.black,),
+                  ]),
+              ),
+
+            // ]),
+
+            ]),
+          ),
+        ),
+      ]),
+    ),
+    ]),
+    );
+  }
 
 
   Widget imgBox(var name,var data, var img,var contWidth){
-    return 
+    return Column(
+
+      children: [
     Stack(
       alignment: Alignment.bottomRight,
       children: [
+        GestureDetector(child: 
     Container(
       // color:Colors.red,
       margin:EdgeInsets.only(top:MediaQuery.of(context).size.height<490?490*4/100:MediaQuery.of(context).size.height*4/100),
       // height:MediaQuery.of(context).size.height<490?490*14/100:MediaQuery.of(context).size.height*14/100,
       // width:MediaQuery.of(context).size.width<260?260:MediaQuery.of(context).size.width,
       width:contWidth,
-      child:
+      child: 
+    //   Text("kdsfk"),
+    // ),
+      // Center(child: Text("jshdk"),),
+      // decoration:BoxDecoration(
+      //   image:DecorationImage(
+      //       image:new NetworkImage(
+      //         img[0],
+      //       ),
+      //     )
+      //   ),
+      // ),
       // Image(image:
       // AssetImage
+
+
+      
       ClipRRect(
         // decoration: BoxDecoration(
         //   color:Colors.pink,
@@ -68,18 +210,80 @@ class _MyHomePageState extends State<MyHomePage> {
       // height:MediaQuery.of(context).size.height<490?490*14/100:MediaQuery.of(context).size.height*14/100),
       ),
       ),
+
     ),
+    onTap:(){
+      setState(() {
+        if(imgTapped==0){
+          imgTapped = 1;
+        }else{
+          imgTapped = 0;
+        }
+      });
+    }
+    ),
+
+
+    // Column(
+    //   mainAxisAlignment: MainAxisAlignment.end,
+    //   // crossAxisAlignment: CrossAxisAlignment.end,
+    //   children: [
+    //     Container(child:
+    //       Text("ksdhfk"),
+    //     ),
+    // // Text("jahsdkslkjdlkasjdjasljdlsad"),
+
+    // ],),
+
+
+    // CustomPaint(
+    //   size:Size(300,300),
+    //   painter:MyPainter(),
+    // ),
+  
+
+    // ClipPath(
+    //   clipper:MyPainter(),
+    //   child:Container(
+    //     // margin: EdgeInsets.only(right: 100),
+    //     height: 30,
+    //     width:125,
+    //     // width:30,
+    //     decoration: BoxDecoration(
+    //       color:Colors.green,
+    //       borderRadius: BorderRadius.only(topRight: Radius.circular(10)),
+    //     ),
+    //   ),
+    // ),
+
+
+    // Container(
+    //   child: Text("jdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfl"),
+    // ),
     Container(
       decoration: BoxDecoration(
       color:Colors.white,
         // borderRadius: BorderRadius.only(topLeft: Radius.circular(10),bottomLeft: Radius.circular(-10)),
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(10),bottomLeft: Radius.circular(10),topRight: Radius.circular(-100)),
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(10)),
       ),
       height:40,
       width:100,
       child: Center(child:Text("+126 Colleges")),
     ),
+
+
+
+    ]),
+    // Flexible(child:
+    //   // margin:EdgeInsets.only(top:MediaQuery.of(context).size.height<490?490*4/100:MediaQuery.of(context).size.height*4/100),
+    //   // direction: Axis.horizontal,
+    //   // children: [
+    //     Text("jdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfljdsfl"),
+    //   // ],
+    //   // ),
+    // ),
     ]);
+    
   }
   var tap=0;
   Widget footerOptions(var i,var icName,var val){
@@ -108,7 +312,7 @@ class _MyHomePageState extends State<MyHomePage> {
         setState((){
           tap = val;
         });
-        print(val);
+        // print(val);
       },
     );
   }
@@ -118,7 +322,7 @@ class _MyHomePageState extends State<MyHomePage> {
     var icName = ['Search','Save','Saved','Account'];
     return 
     Row(children: [
-      for(int i=0;i<4;i++)...[
+      for(i=0;i<4;i++)...[
         Spacer(),
         footerOptions(ic[i],icName[i],i),
         // Divider(color:Colors.red),
@@ -137,6 +341,7 @@ class _MyHomePageState extends State<MyHomePage> {
     var img = ['images/collegeImages.jpg','images/schoolImages.jpg','images/ExamImages.jpg'];
     return Scaffold(
       body: 
+      GestureDetector(child: 
         Stack(
           alignment:Alignment.bottomCenter,
           children: [
@@ -250,11 +455,18 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
 
           // ]),)),
+
+          if(imgTapped==1)...[
+            popUp(contWidth),
+          ]
           
         ]),
-
-
-        // ),
+        onTap:(){
+          setState(() {
+            imgTapped = 0;
+          });
+        }
+        ),
       );
   }
 }
